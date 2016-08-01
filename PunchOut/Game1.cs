@@ -11,6 +11,8 @@ namespace PunchOut
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Texture2D defaultFighter;
+        Vector2 position;
 
         public Game1()
         {
@@ -29,6 +31,7 @@ namespace PunchOut
             // TODO: Add your initialization logic here
 
             base.Initialize();
+            position = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - 50, graphics.GraphicsDevice.Viewport.Height / 2 - 50);
         }
 
         /// <summary>
@@ -41,6 +44,7 @@ namespace PunchOut
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            defaultFighter = this.Content.Load<Texture2D>("Temp Fighter Little Mac");
         }
 
         /// <summary>
@@ -50,6 +54,7 @@ namespace PunchOut
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+            Content.Unload();
         }
 
         /// <summary>
@@ -59,10 +64,19 @@ namespace PunchOut
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            KeyboardState state = Keyboard.GetState();
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || state.IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
+            if (state.IsKeyDown(Keys.Right))
+                position.X += 10;
+            if (state.IsKeyDown(Keys.Left))
+                position.X -= 10;
+            if (state.IsKeyDown(Keys.Down))
+                position.Y += 10;
+            if (state.IsKeyDown(Keys.Up))
+                position.Y -= 10;
 
             base.Update(gameTime);
         }
@@ -76,8 +90,11 @@ namespace PunchOut
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            spriteBatch.Begin();
+            spriteBatch.Draw(defaultFighter, position);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }
 }
+///  
